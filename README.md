@@ -24,6 +24,9 @@ Optional arguments:
   --payload PAYLOAD    (Name of, or raw) payload [ex. reboot or \'whoami\']
 ```
 
+## Updating Known Credentials
+Update `known_credentials/router` and `known_credentials/pi` accordingly.
+
 ## Disclaimer
 
 The standard internet fun disclaimer applies. Don't commit crimes, be responsible.  
