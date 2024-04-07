@@ -15,4 +15,4 @@ Original: [BusesCanFly/rpi-hunter](https://github.com/BusesCanFly/rpi-hunter)
 ## Disclaimer
 
 The standard internet fun disclaimer applies. Don't commit crimes, be responsible.  
-We are in no way responsible for anything and everything you do with rpi-hunter.
+We are in no way responsible for anything and everything you do with network-buster-n-rpi-hunter.
