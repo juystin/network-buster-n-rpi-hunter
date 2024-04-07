@@ -12,6 +12,9 @@ Original: [BusesCanFly/rpi-hunter](https://github.com/BusesCanFly/rpi-hunter)
 2. Download the repo: `git clone https://github.com/juystin/network-buster-n-rpi-hunter`  
 3. Run the script: `python ./network-buster-n-rpi-hunter`
 
+## Usage
+Run `python ./network-buster-n-rpi-hunter --help`
+
 ## Disclaimer
 
 The standard internet fun disclaimer applies. Don't commit crimes, be responsible.  

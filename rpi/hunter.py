@@ -40,12 +40,12 @@ def rpi(ip_list, args, payload):
 		print("\n")
 
 def intro():
-		print('\n')
-		cprint("                        NETWORK BUSTER 'N' RPI-HUNTER                        ", "red")
-		cprint("-----------------------------------------------------------------------------", "yellow")
-		cprint("            Originally by BusesCanFly, Forked & Modified by Team             ", "blue")
-		cprint("-----------------------------------------------------------------------------", "yellow")
-		print('\n')
+	print('\n')
+	cprint("                        NETWORK BUSTER 'N' RPI-HUNTER                        ", "red")
+	cprint("-----------------------------------------------------------------------------", "yellow")
+	cprint("            Originally by BusesCanFly, Forked & Modified by Team             ", "blue")
+	cprint("-----------------------------------------------------------------------------", "yellow")
+	print('\n')
 
 def let_the_hunt_begin(args):
     
