@@ -12,19 +12,6 @@ with open(credentials_file, "r") as file:
 	credentials = [line.strip().split(':') for line in file]
 	user_password_list = [(user, password) for user, password in credentials]
 
-payloads={
-	'reboot': 'sudo reboot',
-}
-
-# List available payloads.
-def list_payloads():
-	l=0
-	cprint("Payloads:", "green")
-	print(colored("Specify with --payload", "green"), colored("name\n", "yellow"))
-	for key,value in payloads.items():
-		print(colored(f"[{key}]", "yellow"), colored(value, "white"))
-	print('\n')
-
 # Scans the network for Raspberry Pi's.
 def scan():
 	main_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -66,16 +53,7 @@ def rpi(ip_list, credentials_list, payload):
 # Main function for rpi-hunter.
 # If args.list is True, it will list available payloads.
 # Otherwise, scan the network for Raspberry Pi's and send a payload to them.
-def let_the_hunt_begin(args):
-    
-	if args.payload in payloads:
-		payload=payloads[args.payload]
-	else:
-		payload=args.payload
-
-	if args.list:
-		list_payloads()
-	else:
-		print("")
-		print(colored("Beginning network scan...", "blue"))
-		rpi(scan(), user_password_list, payload)
+def let_the_hunt_begin(payload):
+	print("")
+	print(colored("Beginning network scan...", "blue"))
+	rpi(scan(), user_password_list, payload)
