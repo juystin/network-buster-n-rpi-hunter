@@ -1,1 +1,4 @@
-scan/RPI_list
+**/__pycache__/
+**/.DS_Store
+
+/scan/
