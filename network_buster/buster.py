@@ -3,6 +3,8 @@ import platform
 import re
 import os
 
+from termcolor import colored
+
 main_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 passwords_file = os.path.join(main_directory, "known_credentials", "router")
 with open(passwords_file, "r") as file:
@@ -62,11 +64,11 @@ def bust():
                     print(f"Attempting to join \"{network}\" using password \"{password}\"...")
                     connect_to_network(network, password, os_name)
                     if is_connected(os_name):
-                        print(f"Connected to network {network} using \"{password}\".")
+                        print(colored(f"Connected to network {network} using \"{password}\".", "green"))
                         return True
                     else:
-                        print(f"Could not connect to network {network} using \"{password}\".")
-                    print("\n")
+                        print(colored(f"Could not connect to network {network} using \"{password}\".", "red"))
+                    print("")
     else:
         print("No networks found.")
 
