@@ -7,8 +7,8 @@ Original: [BusesCanFly/rpi-hunter](https://github.com/BusesCanFly/rpi-hunter)
 
 1. Install dependencies:  
    (Linux) `sudo pip install -U argparse termcolor` and `sudo apt -y install arp-scan tshark sshpass`  
-   (Mac) `sudo pip3 install -U argparse termcolor` `brew cask install wireshark` `brew install arp-scan`   
-   `brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb`
+   (Mac) `sudo pip3 install -U argparse termcolor`, `brew cask install wireshark`, `brew install arp-scan`,  
+   and `brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb`
 2. Download the repo: `git clone https://github.com/juystin/network-buster-n-rpi-hunter`  
 3. Run the script: `python ./network-buster-n-rpi-hunter`
 
