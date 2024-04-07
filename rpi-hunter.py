@@ -63,9 +63,9 @@ else:
 def list():
 	l=0
 	cprint("Payloads:", "green")
-	print colored("Specify with --payload", "green"), colored("name\n", "yellow")
+	print(colored("Specify with --payload", "green"), colored("name\n", "yellow"))
 	for key,value in payloads.items():
-		print colored('['+key+']', 'yellow'), colored(value, 'white')
+		print(colored('['+key+']', 'yellow'), colored(value, 'white'))
 	print('\n')
 
 
@@ -89,7 +89,7 @@ def rpi():
 	cprint("godspeed, little payloads\n", "green")
 
 	while i < len(lines):
-		print colored("sending payload to ", "yellow"), colored(lines[i], "yellow")
+		print(colored("sending payload to ", "yellow"), colored(lines[i], "yellow"))
 		if args.safe:
 			print("sshpass -p \""+args.creds+"\" ssh -o stricthostkeychecking=no "+args.uname+"@"+lines[i]+" "+payload)
 		else:
@@ -100,14 +100,9 @@ def rpi():
 
 def art():
 		print('\n')
-		cprint("██████╗ ██████╗ ██╗      ██╗  ██╗██╗   ██╗███╗   ██╗████████╗███████╗██████╗ ", main_color)
-		cprint("██╔══██╗██╔══██╗██║      ██║  ██║██║   ██║████╗  ██║╚══██╔══╝██╔════╝██╔══██╗", main_color)
-		cprint("██████╔╝██████╔╝██║█████╗███████║██║   ██║██╔██╗ ██║   ██║   █████╗  ██████╔╝", main_color)
-		cprint("██╔══██╗██╔═══╝ ██║╚════╝██╔══██║██║   ██║██║╚██╗██║   ██║   ██╔══╝  ██╔══██╗", main_color)
-		cprint("██║  ██║██║     ██║      ██║  ██║╚██████╔╝██║ ╚████║   ██║   ███████╗██║  ██║", main_color)
-		cprint("╚═╝  ╚═╝╚═╝     ╚═╝      ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝", main_color)
+		cprint("                        NETWORK BUSTER 'N' RPI-HUNTER                        ", main_color)
 		cprint("-----------------------------------------------------------------------------", line_color)
-		cprint("      BusesCanFly                                           76 32 2e 30      ", sub_color)
+		cprint("            Originally by BusesCanFly, Forked & Modified by Team             ", sub_color)
 		cprint("-----------------------------------------------------------------------------", line_color)
 		print('\n')
 
