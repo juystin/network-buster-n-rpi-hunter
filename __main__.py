@@ -43,12 +43,17 @@ def intro():
 
 intro()
 
-if not args.list and bust():
-	if args.payload in payloads:
-		payload=payloads[args.payload]
-	else:
-		payload=args.payload
-	let_the_hunt_begin(payload)
+successful_networks = bust()
+
+if successful_networks:
+    if args.payload in payloads:
+        payload = payloads[args.payload]
+    else:
+        payload = args.payload
+    
+    for network in successful_networks:
+        print(f"Beginning the hunt on {network}...")
+        let_the_hunt_begin(payload)  
 elif args.list:
     list_payloads()
     

@@ -61,23 +61,22 @@ def is_connected(network, os_name):
 
 # Main function for network-buster.
 # This function will attempt to connect to a network using a list of known passwords.
-# If successful, it will return True, otherwise False.
+# If successful, it will add network to the list of successful networks.
 def bust():
+    successful_networks = []
     os_name = platform.system()
     networks = get_networks(os_name)
 
-    if len(networks) > 0:
+    if networks:
         for network in networks:
             for password in passwords:
                 print(f"Attempting to join {colored(network, 'cyan')} using password {colored(password, 'blue')}...")
                 connect_to_network(network, password, os_name)
                 if is_connected(network, os_name):
                     print(colored(f"Connected to network {network}.", "green"))
-                    return True
+                    successful_networks.append(network)
                 else:
-                    print(colored(f"Could not connect.", "red"))
+                    print(colored("Could not connect.", "red"))
                 print("")
-    else:
-        print("No networks found.")
 
-    return False
+    return successful_networks
