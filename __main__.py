@@ -1,7 +1,7 @@
 import argparse
 
 from rpi.hunter import let_the_hunt_begin
-from network_buster.buster import bust
+from network_buster.buster import bust, connect_to_network
 
 from termcolor import colored, cprint
 
@@ -53,6 +53,7 @@ if successful_networks:
     
     for network in successful_networks:
         print(f"Beginning the hunt on {network}...")
+        connect_to_network(network['network'], network['password'], 'Darwin') 
         let_the_hunt_begin(payload)  
 elif args.list:
     list_payloads()
