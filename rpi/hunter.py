@@ -57,6 +57,5 @@ def rpi(ip_list, credentials_list, payload):
 # If args.list is True, it will list available payloads.
 # Otherwise, scan the network for Raspberry Pi's and send a payload to them.
 def let_the_hunt_begin(payload):
-	print("")
 	print(colored("Beginning network scan...", "blue"))
 	rpi(scan(), user_password_list, payload)

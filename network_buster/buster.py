@@ -4,7 +4,6 @@ import re
 import os
 
 from termcolor import colored
-import time
 
 main_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 passwords_file = os.path.join(main_directory, "known_credentials", "router")
@@ -38,25 +37,28 @@ def get_networks(os_name):
 # Attempt to connect to a network using the given SSID, password, and operating system name.
 # If successful, return True. Otherwise, return False.
 def connect_to_network(ssid, password, os_name):
-    dhcp_lease_assigned = False
-    
+
     try:
         if os_name == "Linux":
             connect_command = f"nmcli device wifi connect \"{ssid}\" password \"{password}\""
             subprocess.run(connect_command, shell=True)
         elif os_name == "Darwin":
             connect_command = f"networksetup -setairportnetwork en0 \"{ssid}\" {password}"
-            subprocess.run(connect_command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            while not dhcp_lease_assigned:
+            output = subprocess.run(connect_command, shell=True, capture_output=True, text=True)
+            # output.stdout returns an error message when cannot connect, so use this as the flag 
+            if len(output.stdout) > 0:
+                return False
+            print("Waiting for DHCP lease...")
+            while True:
                 out = subprocess.check_output("ifconfig en0", shell=True, text=True)
                 if "inet" in out:
-                    dhcp_lease_assigned = True
+                    return True
         else:
             print("Unsupported OS")
     except subprocess.CalledProcessError as e:
         print(f"Error: {e}")
         
-    return dhcp_lease_assigned
+    return False
 
 # Main function for network-buster.
 # This function will attempt to connect to a network using a list of known passwords.
@@ -77,9 +79,10 @@ def bust():
                         "password": password
                     }
                     successful_networks.append(successful_network)
+                    print("")
                     break
                 else:
                     print(colored("Could not connect.", "red"))
-                print("")
+                    print("")
 
     return successful_networks
