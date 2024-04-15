@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--list', action='store_true',
 					help='List available payloads')
 parser.add_argument('--payload', type=str, default='whoami',
-					help='(Name of, or raw) payload [ex. password or \'whoami\']')
+					help='(Name of, or raw) payload [ex. password or \'reboot\'], defaults to \'whoami\'')
 
 args = parser.parse_args()
 
