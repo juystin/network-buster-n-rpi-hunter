@@ -21,7 +21,7 @@ python network-buster-n-rpi-hunter [-h] [--list] [--payload PAYLOAD]
 Optional arguments:
   -h, --help           show this help message and exit
   --list               List available payloads
-  --payload PAYLOAD    (Name of, or raw) payload [ex. reboot or \'whoami\']
+  --payload PAYLOAD    (Name of, or raw) payload [ex. reboot or 'whoami']
 ```
 
 ## Updating Known Credentials

